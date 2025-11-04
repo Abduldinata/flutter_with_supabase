@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-// import 'package:myapp/penghitung_screen.dart';
-// import 'package:myapp/profil_screen.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-void main() {
+import 'pages/login_page.dart';
+import 'pages/home_page.dart';
+import 'pages/profile_page.dart'; // dipakai oleh Get.to(() => ProfilePage())
+import 'services/session_service.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init(); // WAJIB: inisialisasi GetStorage sebelum digunakan
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-    theme: ThemeData(
-    useMaterial3: false, // tambahkan baris ini
-    primarySwatch: Colors.blue,
-    ),
-  
-      home: const LoginScreen(),
+    // Tentukan halaman awal berdasarkan status login
+    final startPage = session.isLoggedIn ? const HomePage() : const LoginPage();
+
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'GetStorage + Get (Simple)',
+      home: startPage,
     );
   }
 }
